@@ -31,10 +31,10 @@ Yii::import('vendor.bscheshir.yii-editable-grid.*');
 // Makes row template
 $row_template = '
 	<tr>
-		<td>'.CHtml::textField('TestModel[{gridNum}][{rowNum}][title]', '', array('size'=>40,'maxlength'=>255)).'</td>
-		<td>'.CHtml::textField('TestModel[{gridNum}][{rowNum}][price]', '', array('size'=>5,'maxlength'=>15)).'</td>
-		<td>'.CHtml::textField('TestModel[{gridNum}][{rowNum}][quantity]', '', array('size'=>5,'maxlength'=>8)).'</td>
-		<td>'.CHtml::dropDownList('TestModel[{gridNum}][{rowNum}][color]', '', $colors_list, array('empty'=>'')).'</td>
+		<td>'.CHtml::textField($dataProvider->modelClass . '[{gridNum}][{rowNum}][title]', '', array('size'=>40,'maxlength'=>255)).'</td>
+		<td>'.CHtml::textField($dataProvider->modelClass . '[{gridNum}][{rowNum}][price]', '', array('size'=>5,'maxlength'=>15)).'</td>
+		<td>'.CHtml::textField($dataProvider->modelClass . '[{gridNum}][{rowNum}][quantity]', '', array('size'=>5,'maxlength'=>8)).'</td>
+		<td>'.CHtml::dropDownList($dataProvider->modelClass . '[{gridNum}][{rowNum}][color]', '', $colors_list, array('empty'=>'')).'</td>
 		<td style="text-align: right;">0</td>
 		<td class="button-column"><a class="removeRow" title="Delete" href="#">Delete</a></td>
 	</tr>
@@ -52,7 +52,7 @@ $this->widget('EditableGrid', array(
 		array(
 			'class' => 'EditableGridColumn',
 			'header' => 'Title',
-			'name' => '[{gridNum}][{rowNum}]title',
+			'name' => 'title',
 			'tag' => 'textField',
 			'tagHtmlOptions' => array(
 				'size' => '40'
@@ -61,7 +61,7 @@ $this->widget('EditableGrid', array(
 		array(
 			'class' => 'EditableGridColumn',
 			'header' => 'Price',
-			'name' => '[{gridNum}][{rowNum}]price',
+			'name' => 'price',
 			'tag' => 'textField',
 			'tagHtmlOptions' => array(
 				'size' => '5'
@@ -70,7 +70,7 @@ $this->widget('EditableGrid', array(
 		array(
 			'class' => 'EditableGridColumn',
 			'header' => 'Quantity',
-			'name' => '[{gridNum}][{rowNum}]quantity',
+			'name' => 'quantity',
 			'tag' => 'textField',
 			'tagHtmlOptions' => array(
 				'size' => '5'
@@ -79,7 +79,7 @@ $this->widget('EditableGrid', array(
 		array(
 			'class' => 'EditableGridColumn',
 			'header' => 'Color',
-			'name' => '[{gridNum}][{rowNum}]color',
+			'name' => 'color',
 			'tag' => 'dropDownList',
 			'tagData' => $colors_list,
 			'tagHtmlOptions' => array(
