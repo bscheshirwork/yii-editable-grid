@@ -29,7 +29,7 @@ and run update from your composer
 Yii::import('vendor.bscheshir.yii-editable-grid.*');
 
 // Init your own data provider
-$dataProvider = new CArrayDataProvider( TestModel::model()->findAll() );
+$dataProvider = new CActiveDataProvider( TestModel );
 
 // Makes row template
 $row_template = '
