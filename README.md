@@ -28,6 +28,9 @@ and run update from your composer
 // Import widget
 Yii::import('vendor.bscheshir.yii-editable-grid.*');
 
+// Init your own data provider
+$dataProvider = new CArrayDataProvider( TestModel::model()->findAll() );
+
 // Makes row template
 $row_template = '
 	<tr>
@@ -39,9 +42,6 @@ $row_template = '
 		<td class="button-column"><a class="removeRow" title="Delete" href="#">Delete</a></td>
 	</tr>
 ';
-
-// Init your own data provider
-$dataProvider = new CArrayDataProvider( TestModel::model()->findAll() );
 
 // Use widget
 $this->widget('EditableGrid', array(
