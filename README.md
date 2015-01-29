@@ -2,8 +2,27 @@ yii-editable-grid
 =================
 
 Yii editable grid
+# Installing
 
-Usage in view:
+add to you composer.json in same section
+```
+"repositories": [
+	...
+	{
+		"type": "git",
+		"url": "http://github.com/bscheshirwork/yii-editable-grid"
+	}
+	...
+],
+"require": {
+	...
+	"bscheshir/yii-editable-grid": "dev-master"
+	...
+}
+```
+and run update from your composer
+
+#Usage in view:
 
 ```php
 // Import widget
