@@ -1,0 +1,27 @@
+{
+	"name": "bscheshir/yii-editable-grid",
+	"description": "This is a editable grid extension for the Yii Framework.",
+	"license": "MIT",
+	"keywords": [
+		"yii",
+		"GridView",
+		"editable",
+		"grid",
+		"add row"
+	],
+	"authors": [
+	{
+		"name": "BSCheshir",
+		"email": "bscheshir@gmail.com"
+	}
+	],
+		"repositories": [
+	{
+		"type": "git",
+		"url": "http://github.com/bscheshirwork/yii-editable-grid"
+	}
+	],
+	"require": {
+		"php": ">=5.3.3"
+	}
+}
