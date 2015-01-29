@@ -7,7 +7,7 @@ Usage in view:
 
 ```php
 // Import widget
-Yii::import('application.widgets.yii-editable-grid.*');
+Yii::import('vendor.bscheshir.yii-editable-grid.*');
 
 // Makes row template
 $row_template = '
