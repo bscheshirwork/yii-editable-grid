@@ -104,6 +104,10 @@ $this->widget('EditableGrid', array(
 row data support
 ```php
 ...
+$controller = $this;
+
+$this->widget('EditableGrid', [
+...
 		[
 			'class'             => 'EditableDataColumn',
 			'header'            => 'Title',
@@ -115,7 +119,7 @@ row data support
 			'htmlOptions'       => [
 				'style' => 'width:150px; text-align:left;',
 			],
-			'value'             => function ($data, $row, ) {
+			'value'             => function ($data, $row, $grid, $name, $real) {
 			/** 
 			* @var CModel|array $data model or array from DataProvider
 			* @var int $row number of row
@@ -130,7 +134,17 @@ row data support
 				$real;
 			},
 		],
+		[
+			'class'             => 'EditableDataColumn',
+			'name'              => 'idSort',
+			'header'            => $model->getAttributeLabel('id'),
+			'type'              => 'raw',
+			'value'             => function($data, $row, $grid, $name, $real) use ($controller) {
+				return $controller->renderPartial('view', ['data' => $data], true);
+			},
+		],
 ...
+]);
 ```
 ##Demo
 Please see **[size.perm.ru/yii-editable-grid/](http://size.perm.ru/yii-editable-grid/)**
