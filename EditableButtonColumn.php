@@ -3,8 +3,8 @@
 /**
  * EditableButtonColumn class file.
  *
- * @author Dyomin Dmitry <sizemail@gmail.com>
- * @link http://size.perm.ru/yii-editable-grid
+ * @author    Dyomin Dmitry <sizemail@gmail.com>
+ * @link      http://size.perm.ru/yii-editable-grid
  * @copyright 2014 SiZE
  */
 class EditableButtonColumn extends CButtonColumn
@@ -40,7 +40,7 @@ class EditableButtonColumn extends CButtonColumn
     /**
      * @var array the HTML options for the remove row button tag.
      */
-    public $removeRowButtonOptions = array('class' => 'removeRow');
+    public $removeRowButtonOptions = ['class' => 'removeRow'];
 
     /**
      * @var string the confirmation message to be displayed when removeRow button is clicked.
@@ -72,12 +72,12 @@ class EditableButtonColumn extends CButtonColumn
 
         $id = 'removeRow';
 
-        $button = array(
+        $button = [
             'label'    => $this->{$id . 'ButtonLabel'},
             'url'      => $this->{$id . 'ButtonUrl'},
             'imageUrl' => $this->{$id . 'ButtonImageUrl'},
             'options'  => $this->{$id . 'ButtonOptions'},
-        );
+        ];
 
         if (isset($this->buttons[$id])) {
             $this->buttons[$id] = array_merge($button, $this->buttons[$id]);

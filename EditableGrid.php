@@ -4,8 +4,8 @@ Yii::import('zii.widgets.grid.CGridView');
 /**
  * EditableGrid class file.
  *
- * @author Dyomin Dmitry <sizemail@gmail.com>
- * @link http://size.perm.ru/yii-editable-grid
+ * @author    Dyomin Dmitry <sizemail@gmail.com>
+ * @link      http://size.perm.ru/yii-editable-grid
  * @copyright 2014 SiZE
  */
 class EditableGrid extends CGridView
@@ -34,9 +34,9 @@ class EditableGrid extends CGridView
     /**
      * @var array The HTML options for the create row button tag
      */
-    public $buttonCreateRowOptions = array(
+    public $buttonCreateRowOptions = [
         'class' => 'new-grid-row'
-    );
+    ];
 
     /**
      * @var string The HTML template for the new row
@@ -61,7 +61,7 @@ class EditableGrid extends CGridView
     /**
      * @var array the HTML options for the hidden field primaryKey
      */
-    public $primaryKeyHtmlOptions = array();
+    public $primaryKeyHtmlOptions = [];
 
     public function init()
     {
@@ -132,7 +132,7 @@ EOD;
         }
         echo CHtml::button($this->buttonCreateRowLabel, $this->buttonCreateRowOptions);
 
-        echo CHtml::textArea('', $this->rowTemplate, array('id' => $this->rowTemplateId, 'style' => 'display: none;'));
+        echo CHtml::textArea('', $this->rowTemplate, ['id' => $this->rowTemplateId, 'style' => 'display: none;']);
     }
 
 }

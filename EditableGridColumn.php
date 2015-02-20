@@ -4,11 +4,11 @@
  * EditableGridColumn class file.
  * Makes editable grid column.
  *
- * @author Dyomin Dmitry <sizemail@gmail.com>
- * @link http://size.perm.ru/yii-editable-grid
+ * @author    Dyomin Dmitry <sizemail@gmail.com>
+ * @link      http://size.perm.ru/yii-editable-grid
  * @copyright 2014 SiZE
  */
-class EditableGridColumn extends CDataColumn
+class EditableGridColumn extends EditableDataColumn
 {
 
     /**
@@ -24,60 +24,35 @@ class EditableGridColumn extends CDataColumn
     /**
      * @var array The HTML options for the cell tag.
      */
-    public $tagHtmlOptions = array();
-
-    /**
-     * @var int Grid row counter
-     */
-    private static $_prevRowNum;
+    public $tagHtmlOptions = [];
 
     /**
      * Renders the data cell content.
      * This method evaluates {@link value} or {@link name} and renders the result.
-     * @param integer $row the row number (zero-based)
-     * @param mixed $data the data associated with the row
+     * @param integer $row  the row number (zero-based)
+     * @param mixed   $data the data associated with the row
      */
     protected function renderDataCellContent($row, $data)
     {
         if ($this->tag === null) {
             parent::renderDataCellContent($row, $data);
         } else {
-            $is_model = ($data instanceof CModel) ? true : false;
+            $this->renderIdHiddenField($row, $data);
+            $name = $this->maskedName($row, $real = $this->name);
 
-            // Запишем идентификатор для существующей записи
-            if (self::$_prevRowNum !== $row) {
-                self::$_prevRowNum = $row;
-                $primary_mask = str_replace('{name}', $this->grid->primaryKey, $this->grid->fieldNameMask);
-                $primary_name = str_replace(array('{gridNum}', '{rowNum}'), array($this->grid->getGridCounter(), $row), $primary_mask);
-                $primary_real = $this->grid->primaryKey;
-                if (isset($data[$primary_real])) {
-                    if ($is_model) {
-                        echo CHtml::activeHiddenField($data, $primary_name, $this->grid->primaryKeyHtmlOptions);
-                    } else {
-                        echo CHtml::hiddenField($primary_name, $data[$primary_real], $this->grid->primaryKeyHtmlOptions);
-                    }
-                }
-            }
-
-            $mask = str_replace('{name}', $this->name, $this->grid->fieldNameMask);
-            $real = $this->name;
-            $name = str_replace(array('{gridNum}', '{rowNum}'), array($this->grid->getGridCounter(), $row), $mask);
-
+            $is_model = $data instanceof CModel;
             switch ($this->tag) {
                 case 'textField':
-                    if ($is_model) {
+                    if ($is_model)
                         echo CHtml::activeTextField($data, $name, $this->tagHtmlOptions);
-                    } else {
+                    else
                         echo CHtml::textField($name, $data[$real], $this->tagHtmlOptions);
-                    }
                     break;
-
                 case 'dropDownList':
-                    if ($is_model) {
+                    if ($is_model)
                         echo CHtml::activeDropDownList($data, $name, $this->tagData, $this->tagHtmlOptions);
-                    } else {
+                    else
                         echo CHtml::dropDownList($name, $data[$real], $this->tagData, $this->tagHtmlOptions);
-                    }
                     break;
             }
         }

@@ -101,6 +101,37 @@ $this->widget('EditableGrid', array(
 ));
 ```
 
+row data support
+```php
+...
+		[
+			'class'             => 'EditableDataColumn',
+			'header'            => 'Title',
+			'name'              => 'title',
+			'type'              => 'raw',
+			'headerHtmlOptions' => [
+				'style' => 'width:150px; text-align:left;',
+			],
+			'htmlOptions'       => [
+				'style' => 'width:150px; text-align:left;',
+			],
+			'value'             => function ($data, $row, ) {
+			/** 
+			* @var CModel|array $data model or array from DataProvider
+			* @var int $row number of row
+			* @var int $grid number of grid
+			* @var string $name masked (default mask [{gridNum}][{rowNum}][name]) name i.e. [1][1][title]
+			* @var string $real real name in model|key of array
+			*/
+				return $data->title . ' ' .
+				$row . ' ' .
+				$grid . ' ' .
+				$name . ' ' .
+				$real;
+			},
+		],
+...
+```
 ##Demo
 Please see **[size.perm.ru/yii-editable-grid/](http://size.perm.ru/yii-editable-grid/)**
 

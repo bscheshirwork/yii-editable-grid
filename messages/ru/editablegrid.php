@@ -1,5 +1,5 @@
 <?php
 
-return array(
-	'Add new row' => 'Добавить новую строку',
-);
+return [
+    'Add new row' => 'Добавить новую строку',
+];
