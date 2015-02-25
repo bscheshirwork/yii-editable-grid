@@ -78,7 +78,7 @@ class EditableGrid extends CGridView
     /**
      * @var string mask to modify the name and identifier of field. Default [{gridNum}][{rowNum}]{name}
      */
-    public $fieldNameMask = '[{gridNum}][{rowNum}]{name}';
+    public $fieldNameMask = '[{gridNum}][{rowNum}][{name}]';
 
     /**
      * @var array the HTML options for the hidden field primaryKey

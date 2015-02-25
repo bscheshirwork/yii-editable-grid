@@ -50,7 +50,7 @@ $this->widget('EditableGrid', array(
 	'dataProvider' => $dataProvider,
 	'template' => '{items} {buttonCreateRow}',
 	'rowTemplate' => $rowTemplate,
-	'fieldNameMask' => $fieldNameMaskPrefix . '{name}',
+	'fieldNameMask' => $fieldNameMaskPrefix . '[{name}]',
 	'columns' => array(
 		array(
 			'class' => 'EditableGridColumn',
