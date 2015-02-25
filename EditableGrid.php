@@ -85,6 +85,10 @@ class EditableGrid extends CGridView
      */
     public $primaryKeyHtmlOptions = [];
 
+    private $buttonRemoveInTemplate = false;
+
+    private $buttonCreateInTemplate = false;
+
     public function init()
     {
         parent::init();
@@ -106,6 +110,7 @@ class EditableGrid extends CGridView
             $tr = ['{buttonRemoveRow}' => ob_get_contents()];
             ob_end_clean();
             $this->rowTemplate = strtr($this->rowTemplate, $tr);
+            $this->buttonRemoveInTemplate = true;
         }
         if (strpos($this->template, '{buttonCreateRow}') !== false) {
             $this->initButtonCreateRow();
@@ -115,6 +120,7 @@ class EditableGrid extends CGridView
             if (!($this->buttonCreateRowClick instanceof CJavaScriptExpression)) {
                 $this->buttonCreateRowClick = new CJavaScriptExpression($this->buttonCreateRowClick);
             }
+            $this->buttonCreateInTemplate = true;
         }
     }
 
@@ -189,19 +195,18 @@ EOD;
     public function registerClientScript()
     {
         parent::registerClientScript();
-        $js = '';
-        if (strpos($this->template, '{buttonCreateRow}') !== false) {
+        if ($this->buttonCreateInTemplate) {
             $function = CJavaScript::encode($this->buttonCreateRowClick);
             $class = preg_replace('/\s+/', '.', $this->buttonCreateRowOptions['class']);
-            $js .= "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
+            $js = "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
+            Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->id, $js);
         }
-        if (strpos($this->template, '{buttonRemoveRow}') !== false) {
+        if ($this->buttonRemoveInTemplate) {
             $function = CJavaScript::encode($this->buttonRemoveRowClick);
             $class = preg_replace('/\s+/', '.', $this->buttonRemoveRowOptions['class']);
-            $js .= "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
-        }
-        if($js)
+            $js = "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
             Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->id, $js);
+        }
     }
 
     public function renderButtonCreateRow()
