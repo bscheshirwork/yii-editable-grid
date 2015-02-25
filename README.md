@@ -31,15 +31,17 @@ Yii::import('vendor.bscheshir.yii-editable-grid.*');
 // Init your own data provider
 $dataProvider = new CActiveDataProvider( TestModel );
 
+$fieldNameMaskPrefix = '[{gridNum}][{rowNum}]',
+
 // Makes row template
-$row_template = '
+$rowTemplate = '
 	<tr>
-		<td>'.CHtml::textField($dataProvider->modelClass . '[{gridNum}][{rowNum}][title]', '', array('size'=>40,'maxlength'=>255)).'</td>
-		<td>'.CHtml::textField($dataProvider->modelClass . '[{gridNum}][{rowNum}][price]', '', array('size'=>5,'maxlength'=>15)).'</td>
-		<td>'.CHtml::textField($dataProvider->modelClass . '[{gridNum}][{rowNum}][quantity]', '', array('size'=>5,'maxlength'=>8)).'</td>
-		<td>'.CHtml::dropDownList($dataProvider->modelClass . '[{gridNum}][{rowNum}][color]', '', $colors_list, array('empty'=>'')).'</td>
+		<td>'.CHtml::textField($dataProvider->modelClass . $fieldNameMaskPrefix . '[title]', '', array('size'=>40,'maxlength'=>255)).'</td>
+		<td>'.CHtml::textField($dataProvider->modelClass . $fieldNameMaskPrefix . '[price]', '', array('size'=>5,'maxlength'=>15)).'</td>
+		<td>'.CHtml::textField($dataProvider->modelClass . $fieldNameMaskPrefix . '[quantity]', '', array('size'=>5,'maxlength'=>8)).'</td>
+		<td>'.CHtml::dropDownList($dataProvider->modelClass . $fieldNameMaskPrefix . '[color]', '', $colors_list, array('empty'=>'')).'</td>
 		<td style="text-align: right;">0</td>
-		<td class="button-column"><a class="removeRow" title="Delete" href="#">Delete</a></td>
+		<td class="button-column">{buttonRemoveRow}</td>
 	</tr>
 ';
 
@@ -47,7 +49,8 @@ $row_template = '
 $this->widget('EditableGrid', array(
 	'dataProvider' => $dataProvider,
 	'template' => '{items} {buttonCreateRow}',
-	'rowTemplate' => $row_template,
+	'rowTemplate' => $rowTemplate,
+	'fieldNameMask' => $fieldNameMaskPrefix . '{name}',
 	'columns' => array(
 		array(
 			'class' => 'EditableGridColumn',

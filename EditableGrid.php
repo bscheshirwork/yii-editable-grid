@@ -22,7 +22,7 @@ class EditableGrid extends CGridView
     public $buttonCreateRowLabel;
 
     /**
-     * @var string A javascript function that will be invoked after the removing row
+     * @var string A javascript function that will be invoked after the creating row
      */
     public $afterCreateRow;
 
@@ -37,6 +37,28 @@ class EditableGrid extends CGridView
     public $buttonCreateRowOptions = [
         'class' => 'new-grid-row'
     ];
+
+    /**
+     * @var string The label for the remove new row button. Defaults to "Delete".
+     */
+    public $buttonRemoveRowLabel;
+
+    /**
+     * @var array The HTML options for the remove row button tag
+     */
+    public $buttonRemoveRowOptions = [
+        'class' => 'removeRow'
+    ];
+
+    /**
+     * @var string A javascript function to be invoked when the button remove row is clicked
+     */
+    public $buttonRemoveRowClick;
+
+    /**
+     * @var string A javascript function that will be invoked after the removing row
+     */
+    public $afterRemoveRow;
 
     /**
      * @var string The HTML template for the new row
@@ -71,6 +93,20 @@ class EditableGrid extends CGridView
 
         $this->rowTemplateId = 'row-template-' . $this->id;
 
+        if (strpos($this->rowTemplate, '{buttonRemoveRow}') !== false) {
+            $this->initButtonRemoveRow();
+            if (!isset($this->buttonRemoveRowOptions['class'])) {
+                $this->buttonRemoveRowOptions['class'] = 'removeRow';
+            }
+            if (!($this->buttonRemoveRowClick instanceof CJavaScriptExpression)) {
+                $this->buttonRemoveRowClick = new CJavaScriptExpression($this->buttonRemoveRowClick);
+            }
+            ob_start();
+            $this->renderButtonRemoveRow();
+            $tr = ['{buttonRemoveRow}' => ob_get_contents()];
+            ob_end_clean();
+            $this->rowTemplate = strtr($this->rowTemplate, $tr);
+        }
         if (strpos($this->template, '{buttonCreateRow}') !== false) {
             $this->initButtonCreateRow();
             if (!isset($this->buttonCreateRowOptions['class'])) {
@@ -133,15 +169,39 @@ function(){
 EOD;
     }
 
+    public function initButtonRemoveRow()
+    {
+        if ($this->afterRemoveRow === null) {
+            $this->afterRemoveRow = 'function(){}';
+        }
+
+        $this->buttonRemoveRowClick = <<<EOD
+function(){
+    var th = this,
+        afterDelete = {$this->afterRemoveRow};
+    $(this).parents("tr").remove();
+    afterDelete(th);
+    return false;
+}
+EOD;
+    }
+
     public function registerClientScript()
     {
         parent::registerClientScript();
+        $js = '';
         if (strpos($this->template, '{buttonCreateRow}') !== false) {
             $function = CJavaScript::encode($this->buttonCreateRowClick);
             $class = preg_replace('/\s+/', '.', $this->buttonCreateRowOptions['class']);
-            $js = "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
-            Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->id, $js);
+            $js .= "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
         }
+        if (strpos($this->template, '{buttonRemoveRow}') !== false) {
+            $function = CJavaScript::encode($this->buttonRemoveRowClick);
+            $class = preg_replace('/\s+/', '.', $this->buttonRemoveRowOptions['class']);
+            $js .= "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
+        }
+        if($js)
+            Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->id, $js);
     }
 
     public function renderButtonCreateRow()
@@ -152,6 +212,15 @@ EOD;
         echo CHtml::button($this->buttonCreateRowLabel, $this->buttonCreateRowOptions);
 
         echo CHtml::textArea('', $this->rowTemplate, ['id' => $this->rowTemplateId, 'style' => 'display: none;']);
+    }
+
+    public function renderButtonRemoveRow()
+    {
+        if ($this->buttonRemoveRowLabel === null) {
+            $this->buttonRemoveRowLabel = Yii::t('zii', 'Delete');
+        }
+
+        echo CHtml::button($this->buttonRemoveRowLabel, $this->buttonRemoveRowOptions);
     }
 
 }
