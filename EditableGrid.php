@@ -195,18 +195,19 @@ EOD;
     public function registerClientScript()
     {
         parent::registerClientScript();
+        $js = '';
         if ($this->buttonCreateInTemplate) {
             $function = CJavaScript::encode($this->buttonCreateRowClick);
             $class = preg_replace('/\s+/', '.', $this->buttonCreateRowOptions['class']);
-            $js = "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
-            Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->id, $js);
+            $js .= "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
         }
         if ($this->buttonRemoveInTemplate) {
             $function = CJavaScript::encode($this->buttonRemoveRowClick);
             $class = preg_replace('/\s+/', '.', $this->buttonRemoveRowOptions['class']);
-            $js = "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
-            Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->id, $js);
+            $js .= "jQuery(document).on('click','#{$this->id} .{$class}',$function);";
         }
+        if ($js)
+            Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->id, $js);
     }
 
     public function renderButtonCreateRow()
