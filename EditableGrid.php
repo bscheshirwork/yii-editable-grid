@@ -8,7 +8,7 @@ Yii::import('zii.widgets.grid.CGridView');
  * @link      http://size.perm.ru/yii-editable-grid
  * @copyright 2014 SiZE
  */
-class EditableGrid extends CGridView
+class EditableGrid extends HypGridView
 {
 
     /**

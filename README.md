@@ -1,10 +1,10 @@
 yii-editable-grid
 =================
 
-Yii editable grid
-# Installing
+Таблица полей ввода. 
+# Установка
 
-add to you composer.json in same section
+Добавьте в Ваш composer.json в соответствующие секции
 ```
 "repositories": [
 	...
@@ -20,20 +20,21 @@ add to you composer.json in same section
 	...
 }
 ```
-and run update from your composer
+И запустите composer update
 
-#Usage in view:
+#Использование в отображении (view):
 
 ```php
-// Import widget
+// Импортируем виджет
 Yii::import('vendor.bscheshir.yii-editable-grid.*');
 
-// Init your own data provider
+// Получаем поставщик данных
 $dataProvider = new CActiveDataProvider( TestModel );
 
+// Для удобства повторяющуюся часть маски запишем
 $fieldNameMaskPrefix = '[{gridNum}][{rowNum}]',
 
-// Makes row template
+// Шаблон для новой строчки, которая добавляется в таблицу (обычно примерно соответствует основному)
 $rowTemplate = '
 	<tr>
 		<td>'.CHtml::textField($dataProvider->modelClass . $fieldNameMaskPrefix . '[title]', '', array('size'=>40,'maxlength'=>255)).'</td>
@@ -45,7 +46,7 @@ $rowTemplate = '
 	</tr>
 ';
 
-// Use widget
+// Непосредственный вызов виджета
 $this->widget('EditableGrid', array(
 	'dataProvider' => $dataProvider,
 	'template' => '{items} {buttonCreateRow}',
@@ -104,7 +105,7 @@ $this->widget('EditableGrid', array(
 ));
 ```
 
-row data support
+Поддержка raw data и использование анонимных функций для отрисовки внутри ячейки другого шаблона 
 ```php
 ...
 $controller = $this;
@@ -149,6 +150,114 @@ $this->widget('EditableGrid', [
 ...
 ]);
 ```
-##Demo
-Please see **[size.perm.ru/yii-editable-grid/](http://size.perm.ru/yii-editable-grid/)**
+##Демо
+Для получения представления о том, как это выглядит, смотрите пример исходного варианта **[size.perm.ru/yii-editable-grid/](http://size.perm.ru/yii-editable-grid/)**
 
+Теперь включает в себя HypGridView - **[http://github.com/bscheshirwork/hyphenation-grid])**
+данные одной сущности размещаем в несколько строк (для тех же частичных отрисовок)
+
+
+В свойствах добавлены следующие настройки: 
+
+
+
+'hyphenationColumns' = array();
+массив номеров колонок, по которым осуществлять перенос на новую строку
+или 
+
+
+
+'hyphenationOnCount' = null;
+через каждые N колонок делать перенос
+
+
+
+'hyphenationRowHtmlOptionsExpression' 
+аналог rowHtmlOptionsExpression, применяется к tr перенесённой строки. Если передан hyphenationOnCount - берётся для каждого переноса. Иначе требуется передать массив, где ключами будут номера колонок, по которым идёт перенос,
+а значениями - применяемые для этого переноса опции.
+```php
+'hyphenationRowHtmlOptionsExpression'=>[
+	2=>'["id"=>"second_{$row}"]', //обратите внимание на вид кавычек - строка будет передана в evaluateExpression
+],
+```
+
+
+
+'hyphenationRowCssClassExpression'
+аналог rowCssClassExpression, применяется к tr перенесённой строки. Если передан hyphenationOnCount - берётся для каждого переноса. Иначе требуется передать массив, где ключами будут номера колонок, по которым идёт перенос,
+а значениями - применяемые для этого переноса опции.
+```php
+    'hyphenationRowCssClassExpression'=>[
+        2=>'($row % 2)?"hidden":""', //обратите внимание на вид кавычек - строка будет передана в evaluateExpression
+    ],
+```
+
+
+
+'hyphenationDisableRowCssClass'
+Если данный флаг передан - для новой строки не будет применятся стиль из перечесления rowCssClass.
+Работает в паре с 'hyphenationRewriteClass'
+По умолчанию true
+
+
+
+'hyphenationRewriteClass'
+При переносе строки перезаписывать класс, сформированный для начала строки. Новые значения, вычисленные в
+hyphenationRowHtmlOptionsExpression и hyphenationRowCssClassExpression заменят $htmlOptions['class'] начала строки.
+Используйте с 'hyphenationDisableRowCssClass'=>false, если всё ещё хотите применить тот же стиль из перечисления rowCssClass, что и в начале строки.
+По умолчанию false
+
+
+
+Используем colspan для объеденения колонок.
+
+
+В остальном - используем как обычно. 
+
+
+
+Пример
+```php
+...
+$controller = $this;
+...
+<?php $this->widget('HypGridView', [
+	'id'=>'currencyrate-grid-1',
+	'dataProvider'=>$dataProvider,
+	'hyphenationColumns'=>[2,3],
+	//'hyphenationOnCount'=>2,
+	'hyphenationRowHtmlOptionsExpression'=>[
+		2=>'["id"=>"second_{$row}"]'
+	],
+	'hyphenationRowCssClassExpression'=>[
+		2=>['display'=>'none']
+	],
+	'hyphenationDisableRowCssClass'=>true,
+	'hyphenationRewriteClass'=>false,
+	'columns'=>[
+		'ccy',
+		'ccy_name_ru',
+		[
+			'name'=>'buy',
+			'type' => 'raw',
+			'value'=>'$data->buy/10000',
+			'headerHtmlOptions'=>['colspan'=>'2'],
+			'htmlOptions'=>['colspan'=>'2'],
+		],
+		[
+			'name'=>'sortOrder',
+			'evaluateHtmlOptions'=>true,
+			'htmlOptions'=>['id'=>'"ordering_{$data->id}"'],
+		],
+		'unit',
+		'date',
+		[
+			'name'=>'somename',
+			'header'=>'someheader',
+			'value' => function($data, $row) use ($controller) {
+				return $controller->renderPartial('trait/__someone', array('data' => $data), true);
+			},
+		],
+	],
+]); ?>
+```
