@@ -125,25 +125,6 @@ class EditableGrid extends HypGridView
     }
 
     /**
-     * Renders the table body.
-     */
-    public function renderTableBody()
-    {
-        $data = $this->dataProvider->getData();
-        $n = count($data);
-        echo "<tbody>\n";
-        if ($n > 0) {
-            foreach (array_keys($data) as $row)
-                $this->renderTableRow($row);
-        } else {
-            echo '<tr><td colspan="' . count($this->columns) . '" class="empty">';
-            $this->renderEmptyText();
-            echo "</td></tr>\n";
-        }
-        echo "</tbody>\n";
-    }
-
-    /**
      * @return int
      */
     public function getGridCounter()
