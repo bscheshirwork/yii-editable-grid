@@ -108,6 +108,8 @@ $this->widget('EditableGrid', array(
 Поддержка raw data и использование анонимных функций для отрисовки внутри ячейки другого шаблона 
 ```php
 ...
+$model = $dataProvider->model;
+
 $controller = $this;
 
 $this->widget('EditableGrid', [
@@ -128,7 +130,7 @@ $this->widget('EditableGrid', [
 			* @var CModel|array $data model or array from DataProvider
 			* @var int $row number of row
 			* @var int $grid number of grid
-			* @var string $name masked (default mask [{gridNum}][{rowNum}][name]) name i.e. [1][1][title]
+			* @var string $name masked  name i.e. [1][1]title (default mask [{gridNum}][{rowNum}]{name} resolved to Model[gridNum][rowNum][name] in CHtml)
 			* @var string $real real name in model|key of array
 			*/
 				return $data->title . ' ' .
@@ -145,6 +147,42 @@ $this->widget('EditableGrid', [
 			'type'              => 'raw',
 			'value'             => function($data, $row, $grid, $name, $real) use ($controller) {
 				return $controller->renderPartial('view', ['data' => $data], true);
+			},
+		],
+		//Простое использование CHtml::active..Field
+        'someone'        => [
+			'class'             => 'EditableDataColumn',
+			'name'              => 'someone',
+			'header'            => $model->getAttributeLabel('someone'),
+			'type'              => 'raw',
+			'headerHtmlOptions' => [
+				'style' => 'width:150px; text-align:right;',
+			],
+			'htmlOptions'       => [
+				'style' => 'width:150px; text-align:right;',
+			],
+			'value'             => function ($model, $row, $grid, $name, $real) {
+				/** @var CsDirections $data */
+				echo CHtml::activeTextField($model, $name, [
+					'placeholder' => $model->getAttributeLabel($real),
+					'style'       => 'width:100px',
+				]);
+			},
+		],
+		'markToDelete'      => [
+			'class'             => 'EditableDataColumn',
+			'name'              => 'markToDelete',
+			'header'            => 'Удалить',
+			'type'              => 'raw',
+			'headerHtmlOptions' => [
+				'style' => 'width:20px; text-align:center;',
+			],
+			'htmlOptions'       => [
+				'style' => 'width:20px; text-align:center;',
+			],
+			'value'             => function ($model, $row, $grid, $name, $real) {
+				/** @var CsDirections $data */
+				echo CHtml::activeCheckBox($model, $name);
 			},
 		],
 ...
