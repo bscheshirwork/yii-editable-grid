@@ -162,7 +162,6 @@ $this->widget('EditableGrid', [
 				'style' => 'width:150px; text-align:right;',
 			],
 			'value'             => function ($model, $row, $grid, $name, $real) {
-				/** @var CsDirections $data */
 				echo CHtml::activeTextField($model, $name, [
 					'placeholder' => $model->getAttributeLabel($real),
 					'style'       => 'width:100px',
@@ -181,7 +180,6 @@ $this->widget('EditableGrid', [
 				'style' => 'width:20px; text-align:center;',
 			],
 			'value'             => function ($model, $row, $grid, $name, $real) {
-				/** @var CsDirections $data */
 				echo CHtml::activeCheckBox($model, $name);
 			},
 		],
