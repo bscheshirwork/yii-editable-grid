@@ -22,7 +22,7 @@ class EditableDataColumn extends CDataColumn
      * @param string $attribute the attribute
      * @return string the input name
      */
-    public function resolveName($attribute){
+    public static function resolveName($attribute){
         if(($posFirst=strpos($attribute,'['))!==false)
         {
             if(($pos=strrpos($attribute,']'))!==false && $pos!==strlen($attribute)-1)  // e.g. [a][b]name
