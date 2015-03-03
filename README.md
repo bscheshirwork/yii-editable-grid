@@ -130,7 +130,8 @@ $this->widget('EditableGrid', [
 			* @var CModel|array $data model or array from DataProvider
 			* @var int $row number of row
 			* @var int $grid number of grid
-			* @var string $name masked  name i.e. [1][1]title (default mask [{gridNum}][{rowNum}]{name} resolved to Model[gridNum][rowNum][name] in CHtml)
+			* @var string $name masked  name i.e. [1][1]title (default mask [{gridNum}][{rowNum}]{name} 
+			*      resolved to Model[gridNum][rowNum][name] in CHtml: echo CHtml::activeName($model, $name);
 			* @var string $real real name in model|key of array
 			*/
 				return $data->title . ' ' .

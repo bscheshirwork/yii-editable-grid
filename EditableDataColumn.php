@@ -33,8 +33,8 @@ class EditableDataColumn extends CDataColumn
      */
     protected function renderIdHiddenField($row, $data)
     {
-        if (self::$_prevRowNum !== $row) {
-            self::$_prevRowNum = $row;
+        if (self::$_prevRowNum !== $this->grid->getGridCounter().$row) {
+            self::$_prevRowNum = $this->grid->getGridCounter().$row;
             $name = $this->maskedName($row, $real = $this->grid->primaryKey);
             if (isset($data[$real])) {
                 if ($data instanceof CModel)
