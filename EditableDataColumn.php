@@ -16,6 +16,34 @@ class EditableDataColumn extends CDataColumn
     private static $_prevRowNum;
 
     /**
+     * Generates input name for a data attribute.
+     * Note, the attribute name may be modified after calling this method if the name
+     * contains square brackets (mainly used in tabular input) before the real attribute name.
+     * @param string $attribute the attribute
+     * @return string the input name
+     */
+    protected function resolveName($attribute){
+        if(($posFirst=strpos($attribute,'['))!==false)
+        {
+            if(($pos=strrpos($attribute,']'))!==false && $pos!==strlen($attribute)-1)  // e.g. [a][b]name
+            {
+                $sub=substr($attribute,0,$pos+1);
+                $attribute=substr($attribute,$pos+1);
+                return $sub.'['.$attribute.']';
+            }
+            if($posFirst!==0)  // e.g. name[a][b]
+                return '['.substr($attribute,0,$posFirst).']'.substr($attribute,$posFirst);
+            if(preg_match('/\](\w+\[.*)$/',$attribute,$matches))
+            {
+                $name='['.str_replace(']','][',trim(strtr($attribute,array(']['=>']','['=>']')),']')).']';
+                $attribute=$matches[1];
+                return $name;
+            }
+        }
+        return '['.$attribute.']';
+    }
+
+    /**
      * mask replace
      * @param $row
      * @param $field
@@ -40,7 +68,7 @@ class EditableDataColumn extends CDataColumn
                 if ($data instanceof CModel)
                     echo CHtml::activeHiddenField($data, $name, $this->grid->primaryKeyHtmlOptions);
                 else
-                    echo CHtml::hiddenField($name, $data[$real], $this->grid->primaryKeyHtmlOptions);
+                    echo CHtml::hiddenField(self::resolveName($name), $data[$real], $this->grid->primaryKeyHtmlOptions);
             }
         }
     }

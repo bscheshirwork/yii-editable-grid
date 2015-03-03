@@ -46,13 +46,13 @@ class EditableGridColumn extends EditableDataColumn
                     if ($is_model)
                         echo CHtml::activeTextField($data, $name, $this->tagHtmlOptions);
                     else
-                        echo CHtml::textField($name, $data[$real], $this->tagHtmlOptions);
+                        echo CHtml::textField(self::resolveName($name), $data[$real], $this->tagHtmlOptions);
                     break;
                 case 'dropDownList':
                     if ($is_model)
                         echo CHtml::activeDropDownList($data, $name, $this->tagData, $this->tagHtmlOptions);
                     else
-                        echo CHtml::dropDownList($name, $data[$real], $this->tagData, $this->tagHtmlOptions);
+                        echo CHtml::dropDownList(self::resolveName($name), $data[$real], $this->tagData, $this->tagHtmlOptions);
                     break;
             }
         }
