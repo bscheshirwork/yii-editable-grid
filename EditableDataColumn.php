@@ -22,23 +22,15 @@ class EditableDataColumn extends CDataColumn
      * @param string $attribute the attribute
      * @return string the input name
      */
-    protected function resolveName($attribute){
+    public function resolveName($attribute){
         if(($posFirst=strpos($attribute,'['))!==false)
         {
             if(($pos=strrpos($attribute,']'))!==false && $pos!==strlen($attribute)-1)  // e.g. [a][b]name
-            {
-                $sub=substr($attribute,0,$pos+1);
-                $attribute=substr($attribute,$pos+1);
-                return $sub.'['.$attribute.']';
-            }
+                return substr($attribute,0,$pos+1).'['.substr($attribute,$pos+1).']';
             if($posFirst!==0)  // e.g. name[a][b]
                 return '['.substr($attribute,0,$posFirst).']'.substr($attribute,$posFirst);
             if(preg_match('/\](\w+\[.*)$/',$attribute,$matches))
-            {
-                $name='['.str_replace(']','][',trim(strtr($attribute,array(']['=>']','['=>']')),']')).']';
-                $attribute=$matches[1];
-                return $name;
-            }
+                return '['.str_replace(']','][',trim(strtr($attribute,array(']['=>']','['=>']')),']')).']';
         }
         return '['.$attribute.']';
     }
